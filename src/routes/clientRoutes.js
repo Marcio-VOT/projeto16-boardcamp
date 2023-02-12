@@ -14,6 +14,6 @@ const ClientRouter = Router();
 ClientRouter.get("/custumers", clientsList);
 ClientRouter.get("/custumers/:id", clientFromId);
 ClientRouter.post("/custumers", dataValidation(schema), dupCpf, clientInsert);
-ClientRouter.put("/custumers/:id", clientUpdate);
+ClientRouter.put("/custumers/:id", dataValidation(schema), dupCpf, clientUpdate);
 
 export default ClientRouter;
