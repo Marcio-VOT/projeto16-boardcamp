@@ -1,8 +1,8 @@
 import Joi from "joi";
 
 export const schema = Joi.object({
-    name : Joi.required().string(),
-    image : Joi.required().string().uri(),
-    stockTotal: Joi.required().number().min(1),
-    pricePerDay: Joi.required().number().min(1)
+    name : Joi.string().required(),
+    image : Joi.string().uri().required(),
+    stockTotal: Joi.number().min(1).required(),
+    pricePerDay: Joi.number().min(1).required()
 });
