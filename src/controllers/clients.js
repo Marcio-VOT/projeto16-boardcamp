@@ -14,7 +14,7 @@ export async function clientFromId(req, res) {
         const { id } = req.params;
         const resp = await db.query('SELECT * FROM customers WHERE id = $1;', [id]);
         if(!resp.rowCount) return res.sendStatus(404);
-        res.send(resp.rows);
+        res.send(resp.rows[0]);
     } catch (error) {
         res.status(500).send(error.message)
     }
