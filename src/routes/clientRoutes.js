@@ -11,9 +11,9 @@ import { schema } from "../schemas/clientsInfoSchema.js"
 
 const ClientRouter = Router();
 
-ClientRouter.get("/custumers", clientsList);
-ClientRouter.get("/custumers/:id", clientFromId);
-ClientRouter.post("/custumers", dataValidation(schema), dupCpf, clientInsert);
-ClientRouter.put("/custumers/:id", dataValidation(schema), dupCpf, clientUpdate);
+ClientRouter.get("/customers", clientsList);
+ClientRouter.get("/customers/:id", clientFromId);
+ClientRouter.post("/customers", dataValidation(schema), dupCpf, clientInsert);
+ClientRouter.put("/customers/:id", dataValidation(schema), dupCpf, clientUpdate);
 
 export default ClientRouter;
