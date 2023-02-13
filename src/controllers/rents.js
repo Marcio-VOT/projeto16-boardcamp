@@ -26,7 +26,7 @@ export async function rentInsert(req, res) {
         const originalPrice = rows[0].pricePerDay*daysRented;
         console.log(req.body, rows, originalPrice)
         await db.query('INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "returnDate", "originalPrice", "delayFee") VALUES($1, $2, $3, $4, $5, $6, $7);',[customerId, gameId, dayjs().format('YYYY-MM-DD'), daysRented, null, originalPrice, null] );
-        res.sendStatus(200)
+        res.sendStatus(201)
     } catch (error) {
         res.status(500).send(error.message)
     }
