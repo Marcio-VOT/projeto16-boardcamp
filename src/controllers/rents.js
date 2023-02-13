@@ -7,7 +7,7 @@ export async function rentsList(req, res) {
         SELECT rentals.*,
         JSON_BUILD_OBJECT('id', customers.id, 'name', customers.name) AS customer,
         JSON_BUILD_OBJECT('id', games.id, 'name', games.name) AS game
-        FROM rentals 
+        FROM rentals
         JOIN customers 
         ON rentals."customerId"=customers.id
         JOIN games
@@ -39,12 +39,13 @@ export async function rentEndFromId(req, res) {
         if (!rental.rowCount) return res.sendStatus(404);
         if(rental.rows[0].returnDate !== null) return res.sendStatus(400);
         let delay = Number(dayjs(dayjs() - rental.rows[0].rentDate).format('DD'));
-        if(rental.rows[0].daysRented > delay){
+        if(rental.rows[0].daysRented >= delay){
             delay = 0
         }else{
-            delay -= rental.rows[0].daysRented;
+            delay = dalay-rental.rows[0].daysRented;
         }
         delay = delay*(rental.rows[0].originalPrice/rental.rows[0].daysRented);
+        console.log(rental.rows[0].originalPrice/rental.rows[0].daysRented);
         await db.query(`
         UPDATE rentals 
         SET "returnDate"=$1 , "delayFee"=$2
