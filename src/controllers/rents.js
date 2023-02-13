@@ -44,7 +44,7 @@ export async function rentEndFromId(req, res) {
         }else{
             delay -= rental.rows[0].daysRented;
         }
-        delay *= (rental.rows[0].originalPrice/rental.rows[0].daysRented);
+        delay = delay*(rental.rows[0].originalPrice/rental.rows[0].daysRented);
         await db.query(`
         UPDATE rentals 
         SET "returnDate"=$1 , "delayFee"=$2
