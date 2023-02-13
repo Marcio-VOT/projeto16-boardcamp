@@ -36,16 +36,17 @@ export async function rentEndFromId(req, res) {
     try {
         const { id } = req.params;
         const rental = await db.query(`SELECT * FROM rentals WHERE id=$1;`, [id]);
+        const { rows } = await db.query(`SELECT * FROM games WHERE id=$1;`, [rental.rows[0].gameId])
         if (!rental.rowCount) return res.sendStatus(404);
         if(rental.rows[0].returnDate !== null) return res.sendStatus(400);
         let delay = Number(dayjs(dayjs() - rental.rows[0].rentDate).format('DD'));
         if(rental.rows[0].daysRented >= delay){
             delay = 0
         }else{
-            delay = dalay-rental.rows[0].daysRented;
+            delay = delay - rental.rows[0].daysRented;
         }
-        delay = delay*(rental.rows[0].originalPrice/rental.rows[0].daysRented);
-        console.log(rental.rows[0].originalPrice/rental.rows[0].daysRented);
+        delay = delay*rows[0].pricePerDay;
+        console.log(rental.rows[0].originalPrice/rental.rows[0].daysRented, rows[0].pricePerDay);
         await db.query(`
         UPDATE rentals 
         SET "returnDate"=$1 , "delayFee"=$2
