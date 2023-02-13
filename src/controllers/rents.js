@@ -35,8 +35,8 @@ export async function rentEndFromId(req, res) {
     try {
         const { id } = req.params;
         const rental = await db.query(`SELECT * FROM rentals WHERE id=$1;`, [id]);
-        const { rows } = await db.query(`SELECT * FROM games WHERE id=$1;`, [rental.rows[0].gameId])
         if (!rental.rowCount) return res.sendStatus(404);
+        const { rows } = await db.query(`SELECT * FROM games WHERE id=$1;`, [rental.rows[0].gameId])
         if(rental.rows[0].returnDate !== null) return res.sendStatus(400);
         let delay = Number(dayjs(dayjs() - rental.rows[0].rentDate).format('DD'));
         if(rental.rows[0].daysRented >= delay){
