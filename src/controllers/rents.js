@@ -34,7 +34,22 @@ export async function rentInsert(req, res) {
 
 export async function rentEndFromId(req, res) {
     try {
-        
+        const { id } = req.params;
+        const rental = await db.query(`SELECT * FROM rentals WHERE id=$1;`, [id]);
+        if (!rental.rowCount) return res.sendStatus(404);
+        if(rental.rows[0].returnDate !== null) return res.sendStatus(400);
+        let delay = Number(dayjs(dayjs() - rental.rows[0].rentDate).format('DD'));
+        if(rental.rows[0].daysRented > delay){
+            delay = 0
+        }else{
+            delay -= rental.rows[0].daysRented;
+        }
+        delay *= (rental.rows[0].originalPrice/rental.rows[0].daysRented);
+        await db.query(`
+        UPDATE rentals 
+        SET "returnDate"=$1 , "delayFee"=$2
+        WHERE id=$3;`,[dayjs(), delay, id]);
+        res.sendStatus(200);
     } catch (error) {
         res.status(500).send(error.message)
     }
